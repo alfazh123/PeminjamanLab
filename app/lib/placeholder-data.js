@@ -180,3 +180,11 @@ const borrow = [
     usage: "kelas",
   },
 ];
+
+module.exports = {
+  admin,
+  users,
+  labolatory,
+  asisten_lab,
+  borrow,
+};

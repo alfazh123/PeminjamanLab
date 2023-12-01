@@ -1,6 +1,6 @@
 import { sql } from "@vercel/postgres";
 import {
-    User,
+    Users,
     Borrow,
     LatestBorrow,
     BorrowTable,
@@ -9,7 +9,7 @@ import {
 
 export async function fetchUser() {
     try{
-        const users = await sql<User[]>`
+        const users = await sql<Users[]>`
             SELECT * FROM users
         `;
         return users.rows;
