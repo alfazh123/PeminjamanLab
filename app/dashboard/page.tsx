@@ -1,6 +1,7 @@
 import React from "react";
+import { fetchUser } from "../lib/data";
 
-export default function Page() {
+export default async function Page() {
     return (
         <main>
             <div className="">
