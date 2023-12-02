@@ -1,5 +1,4 @@
 import React from "react";
-import { fetchUser } from "../lib/data";
 
 export default async function Page() {
     return (
