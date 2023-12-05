@@ -45,8 +45,8 @@ model LabHeads {
 model Courses {
   CourseCODE        Int                 @id @default(autoincrement())
   CourseName        String
-  NIP               Lecturers           @relation(fields: [LectureNIP], references: [NIP])
-  LectureNIP        Int
+  LectureNIP        Lecturers           @relation(fields: [NIP], references: [NIP])
+  NIP               Int
   Enrollments       Enrollments[]
   PracticalLabUsage PracticalLabUsage[]
 }

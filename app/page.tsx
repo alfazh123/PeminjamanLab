@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import LatestBorrow from "./ui/dashboard/latest-borrow"
 
 export default function Home() {
   return (
