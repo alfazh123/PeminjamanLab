@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lecturers {
+  NIP            Int              @id @default(autoincrement())
+  Email          String           @unique
+  Name           String
+  Admin          LabHeads[]
+  Courses        Courses[]
+  ThesisLabUsage ThesisLabUsage[]
+}
+
+model Students {
+  NIM            Int              @id @default(autoincrement())
+  Email          String           @unique
+  Name           String
+  Batch          Int
+  Admin          LabAdmins[]
+  Enrollments    Enrollments[]
+  ThesisLabUsage ThesisLabUsage[]
+  TaskUsages     TaskUsages[]
+}
+
+model LabAdmins {
+  students          Students            @relation(fields: [NIM], references: [NIM])
+  NIM               Int                 @id
+  DateOfStart       DateTime
+  TaskUsages        TaskUsages[]
+  PracticalLabUsage PracticalLabUsage[]
+}
+
+model LabHeads {
+  lecturers            Lecturers             @relation(fields: [NIP], references: [NIP])
+  NIP                  Int                   @id
+  DateOfStart          DateTime
+  IncendentalLabUsages IncidentalLabUsages[]
+}
+
+model Courses {
+  CourseCODE        Int                 @id @default(autoincrement())
+  CourseName        String
+  LectureNIP        Lecturers           @relation(fields: [NIP], references: [NIP])
+  NIP               Int
+  Enrollments       Enrollments[]
+  PracticalLabUsage PracticalLabUsage[]
+}
+
+model Enrollments {
+  EnrollmentID Int      @id @default(autoincrement())
+  NIM          Students @relation(fields: [StudentNIM], references: [NIM])
+  StudentNIM   Int
+  code         Courses  @relation(fields: [CourseCODE], references: [CourseCODE])
+  CourseCODE   Int
+}
+
+model EquipmentDetails {
+  EquipmentID        Int                  @id @default(autoincrement())
+  EquipmentName      String
+  EquipmentCondition String
+  EquipmentType      String
+  LastMaintenance    DateTime
+  Equipments         Equipments[]
+  LabEquipmentUsages LabEquipmentUsages[]
+}
+
+model Equipments {
+  EquipmentID        Int                  @id @default(autoincrement())
+  EquipmentQuantity  Int
+  DateOfPurchase     DateTime
+  EquipmentDetails   EquipmentDetails     @relation(fields: [EquipmentID], references: [EquipmentID])
+  LabEquipmentUsages LabEquipmentUsages[]
+}
+
+model LabUsages {
+  LabUsageID          Int                   @id @default(autoincrement())
+  LabUsageDate        DateTime
+  LabUsageDuration    Int
+  LAbUsageType        String
+  ThesisLabUsage      ThesisLabUsage[]
+  PracticalLabUsage   PracticalLabUsage[]
+  LabEquipmentUsages  LabEquipmentUsages[]
+  TaskUsages          TaskUsages[]
+  IncidentalLabUsages IncidentalLabUsages[]
+}
+
+model LabEquipmentUsages {
+  BorroowID                   Int                   @id @default(autoincrement())
+  LabUsageId                  LabUsages             @relation(fields: [LabUsageID], references: [LabUsageID])
+  LabUsageID                  Int
+  EquipmentId                 Equipments            @relation(fields: [EquipmentID], references: [EquipmentID])
+  EquipmentID                 Int
+  BorrowQuantity              Int
+  ThesisLabUsage              ThesisLabUsage[]
+  IncidentalLabUsages         IncidentalLabUsages[]
+  EquipmentDetails            EquipmentDetails?     @relation(fields: [equipmentDetailsEquipmentID], references: [EquipmentID])
+  equipmentDetailsEquipmentID Int?
+}
+
+model ThesisLabUsage {
+  borrowId            LabEquipmentUsages @relation(fields: [BorroowID], references: [BorroowID])
+  BorroowID           Int                @id @default(autoincrement())
+  StudentId           Students           @relation(fields: [StudentNIM], references: [NIM])
+  StudentNIM          Int
+  LabUsageId          LabUsages          @relation(fields: [LabUsageID], references: [LabUsageID])
+  LabUsageID          Int
+  LecturerNIP         Lecturers          @relation(fields: [ThesisSupervisorNIP], references: [NIP])
+  ThesisSupervisorNIP Int
+  ThesisTopic         String
+}
+
+model PracticalLabUsage {
+  LabUsageId LabUsages @relation(fields: [LabUsageID], references: [LabUsageID])
+  LabUsageID Int       @id @default(autoincrement())
+  CourseCode Courses   @relation(fields: [CourseCODE], references: [CourseCODE])
+  CourseCODE Int
+  AdminId    LabAdmins @relation(fields: [AdminNIM], references: [NIM])
+  AdminNIM   Int
+}
+
+model TaskUsages {
+  LabUsageId LabUsages @relation(fields: [LabUsageID], references: [LabUsageID])
+  LabUsageID Int       @id @default(autoincrement())
+  TaskTopic  String
+  AdminId    LabAdmins @relation(fields: [AdminNIM], references: [NIM])
+  AdminNIM   Int
+  StudentId  Students  @relation(fields: [StudentNIM], references: [NIM])
+  StudentNIM Int
+}
+
+model IncidentalLabUsages {
+  LabUsageId           LabUsages          @relation(fields: [LabUsageID], references: [LabUsageID])
+  LabUsageID           Int                @id @default(autoincrement())
+  LabUsageDescription  String
+  LabUsageRequestName  String
+  LabUsageRequestEmail String
+  LabUsageRequestPhone String
+  PermissionStatus     String
+  PermissionId         LabHeads           @relation(fields: [PermissionNIP], references: [NIP])
+  PermissionNIP        Int
+  EquipmentBorrowId    LabEquipmentUsages @relation(fields: [BorroowID], references: [BorroowID])
+  BorroowID            Int
+}

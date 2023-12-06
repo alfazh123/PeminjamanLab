@@ -1,3 +1,3 @@
 export default function Page() {
-    return <div>Halo</div>
+  return <div>halo</div>;
 }
