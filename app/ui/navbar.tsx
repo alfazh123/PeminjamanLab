@@ -4,7 +4,7 @@ export default function Navbar() {
     return (
         <div className="flex flex-col border-solid border-slate-600 ">
             <div className="bg-blue-500 p-6 rounded-md">
-                <Link href="/">Lebolatory</Link>
+                <Link href="/">Labolatory</Link>
             </div>
 
             <div className="flex justify-evenly items-center">
