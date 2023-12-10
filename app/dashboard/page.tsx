@@ -42,7 +42,7 @@ export default async function Page() {
           <tr className="p-5">
             <th>NIM</th>
             <th>Name</th>
-            <th>Email</th>
+            <th>Email tes</th>
           </tr>
         </thead>
         <tbody>
